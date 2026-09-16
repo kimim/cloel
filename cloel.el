@@ -246,7 +246,7 @@ On Unix, uses SIGTERM then SIGKILL."
 
 (defun cloel-set-app-data (app-name key value)
   "Set KEY to VALUE for APP-NAME."
-  (when-let ((app-data (cloel-get-app-data app-name)))
+  (when-let* ((app-data (cloel-get-app-data app-name)))
     (puthash app-name (plist-put app-data key value) cloel-apps)))
 
 (defun cloel-get-free-port-from-port-file ()
@@ -572,7 +572,7 @@ Handles both Unix (\\n) and Windows (\\r\\n) line endings."
     (dolist (line (reverse lines))
       (when (and line (not (string-blank-p line)))
         (condition-case err
-            (when-let ((data (parseedn-read-str line)))
+            (when-let* ((data (parseedn-read-str line)))
               (if (and (hash-table-p data) (gethash :type data))
                   (cl-case (gethash :type data)
                     (:call-elisp-sync (cloel-handle-sync-call proc data app-name))
